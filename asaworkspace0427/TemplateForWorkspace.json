@@ -1394,7 +1394,7 @@
 						}
 					],
 					"transformations": [],
-					"script": "source(output(\n\t\tTransactionId as string,\n\t\tCustomerId as integer,\n\t\tProductId as short,\n\t\tQuantity as byte,\n\t\tPrice as decimal(38,18),\n\t\tTotalAmount as decimal(38,18),\n\t\tTransactionDate as integer,\n\t\tProfitAmount as decimal(38,18),\n\t\tHour as byte,\n\t\tMinute as byte,\n\t\tStoreId as short,\n\t\tYear as string,\n\t\tQuarter as string,\n\t\tMonth as string,\n\t\tDay as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet',\n\twildcardPaths:['sale-small/Year=2018/*/*/*/*','sale-small/Year=2018/*/*/*/*']) ~> salesdata\nsalesdata sink(input(\n\t\tTransactionId as string,\n\t\tCustomerId as integer,\n\t\tProductId as integer,\n\t\tQuantity as integer,\n\t\tPrice as decimal(9,2),\n\t\tTotalAmount as decimal(9,2),\n\t\tTransactionDateId as integer,\n\t\tProfitAmount as decimal(9,2),\n\t\tHour as integer,\n\t\tMinute as integer,\n\t\tStoreId as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tmapColumn(\n\t\tTransactionId,\n\t\tCustomerId,\n\t\tProductId,\n\t\tQuantity,\n\t\tPrice,\n\t\tTotalAmount,\n\t\tTransactionDateId = TransactionDate,\n\t\tProfitAmount,\n\t\tHour,\n\t\tMinute,\n\t\tStoreId\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sale"
+					"script": "source(output(\n\t\tTransactionId as string,\n\t\tCustomerId as integer,\n\t\tProductId as short,\n\t\tQuantity as byte,\n\t\tPrice as decimal(38,18),\n\t\tTotalAmount as decimal(38,18),\n\t\tTransactionDate as integer,\n\t\tProfitAmount as decimal(38,18),\n\t\tHour as byte,\n\t\tMinute as byte,\n\t\tStoreId as short,\n\t\tYear as string,\n\t\tQuarter as string,\n\t\tMonth as string,\n\t\tDay as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'parquet',\n\twildcardPaths:['sale-small/Year=2018/*/*/*/*','sale-small/Year=2019/*/*/*/*']) ~> salesdata\nsalesdata sink(input(\n\t\tTransactionId as string,\n\t\tCustomerId as integer,\n\t\tProductId as integer,\n\t\tQuantity as integer,\n\t\tPrice as decimal(9,2),\n\t\tTotalAmount as decimal(9,2),\n\t\tTransactionDateId as integer,\n\t\tProfitAmount as decimal(9,2),\n\t\tHour as integer,\n\t\tMinute as integer,\n\t\tStoreId as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'table',\n\tstaged: true,\n\tpreSQLs:['truncate table [wwi_mcw].[SaleSmall]'],\n\tmapColumn(\n\t\tTransactionId,\n\t\tCustomerId,\n\t\tProductId,\n\t\tQuantity,\n\t\tPrice,\n\t\tTotalAmount,\n\t\tTransactionDateId = TransactionDate,\n\t\tProfitAmount,\n\t\tHour,\n\t\tMinute,\n\t\tStoreId\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sale"
 				}
 			},
 			"dependsOn": [
@@ -1462,7 +1462,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE TABLE [wwi_mcw].[CampaignAnalytics]\n(\n    [Region] [nvarchar](50)  NULL,\n    [Country] [nvarchar](30)  NOT NULL,\n    [ProductCategory] [nvarchar](50)  NOT NULL,\n    [CampaignName] [nvarchar](500)  NOT NULL,\n    [Analyst] [nvarchar](25) NULL,\n    [Revenue] [decimal](10,2)  NULL,\n    [RevenueTarget] [decimal](10,2)  NULL,\n    [City] [nvarchar](50)  NULL,\n    [State] [nvarchar](25)  NULL\n)\nWITH\n(\n    DISTRIBUTION = HASH ( [Region] ),\n    CLUSTERED COLUMNSTORE INDEX\n);  ",
+					"query": "CREATE TABLE [wwi_mcw].[CampaignAnalytics]\n(\n    [Region] [nvarchar](50)  NULL,\n    [Country] [nvarchar](30)  NOT NULL,\n    [ProductCategory] [nvarchar](50)  NOT NULL,\n    [CampaignName] [nvarchar](500)  NOT NULL,\n    [Analyst] [nvarchar](25) NULL,\n    [Revenue] [decimal](10,2)  NULL,\n    [RevenueTarget] [decimal](10,2)  NULL,\n    [City] [nvarchar](50)  NULL,\n    [State] [nvarchar](25)  NULL\n)\nWITH\n(\n    DISTRIBUTION = HASH ( [Region] ),\n    CLUSTERED COLUMNSTORE INDEX\n);\n\n\nSELECT COUNT(*) FROM [wwi_mcw].[CampaignAnalytics]\n\nSELECT COUNT(*) FROM [wwi_mcw].[Product]",
 					"metadata": {
 						"language": "sql"
 					},
@@ -1507,6 +1507,25 @@
 					"currentConnection": {
 						"name": "SQLPool01",
 						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Serverless_Parquet')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231/sale-small-20101231-snappy.parquet',\n        FORMAT='PARQUET'\n    ) AS [result]\n\nSELECT\n    TransactionDate, ProductId,\n    CAST(SUM(ProfitAmount) AS decimal(18,2)) AS [(sum) Profit],\n    CAST(AVG(ProfitAmount) AS decimal(18,2)) AS [(avg) Profit],\n    SUM(Quantity) AS [(sum) Quantity]\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231/sale-small-20101231-snappy.parquet',\n        FORMAT='PARQUET'\n    ) AS [r] GROUP BY r.TransactionDate, r.ProductId;\n\nSELECT\n    COUNT_BIG(*)\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2019/*/*/*/*',\n        FORMAT='PARQUET'\n    ) AS [r];\n\nSELECT\n    COUNT_BIG(*)\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2018/*/*/*/*',\n        FORMAT='PARQUET'\n    ) AS [r];",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "master",
+						"type": "SqlOnDemand"
 					}
 				},
 				"type": "SqlQuery"
