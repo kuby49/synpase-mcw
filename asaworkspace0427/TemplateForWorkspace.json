@@ -58,6 +58,56 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/ASAMCW - Exercise 2 - Copy Campaign Analytics Data')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "ASAMCW_Exercise_2_Campaign_Analytics_Data",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "ASAMCW_Exercise_2_Campaign_Analytics_Data",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"campaignanalyticscsv": {},
+									"campaignanlyticsasa": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "asadatalake0427",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "staging/mcwcampaignanalytics"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/dataflows/ASAMCW_Exercise_2_Campaign_Analytics_Data')]",
+				"[concat(variables('workspaceId'), '/linkedServices/asadatalake0427')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/ASAMCW - Exercise 2 - Copy Customer Info')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
@@ -2168,15 +2218,6 @@
 						"execution_count": null
 					}
 				]
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Pipeline 1')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
 			},
 			"dependsOn": []
 		}
