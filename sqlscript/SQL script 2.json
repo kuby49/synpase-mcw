@@ -2,7 +2,7 @@
 	"name": "SQL script 2",
 	"properties": {
 		"content": {
-			"query": "select * from [wwi_mcw].[SaleSmall]",
+			"query": "CREATE TABLE [wwi_mcw].[CustomerInfo]\n (\n   [UserName] [nvarchar](100)  NULL,\n   [Gender] [nvarchar](10)  NULL,\n   [Phone] [nvarchar](50)  NULL,\n   [Email] [nvarchar](150)  NULL,\n   [CreditCard] [nvarchar](21)  NULL\n )\n WITH\n (\n   DISTRIBUTION = REPLICATE,\n   CLUSTERED COLUMNSTORE INDEX\n )\n GO\n \n",
 			"metadata": {
 				"language": "sql"
 			},
