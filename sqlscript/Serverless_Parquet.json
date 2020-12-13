@@ -1,0 +1,16 @@
+{
+	"name": "Serverless_Parquet",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231/sale-small-20101231-snappy.parquet',\n        FORMAT='PARQUET'\n    ) AS [result]\n\nSELECT\n    TransactionDate, ProductId,\n    CAST(SUM(ProfitAmount) AS decimal(18,2)) AS [(sum) Profit],\n    CAST(AVG(ProfitAmount) AS decimal(18,2)) AS [(avg) Profit],\n    SUM(Quantity) AS [(sum) Quantity]\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231/sale-small-20101231-snappy.parquet',\n        FORMAT='PARQUET'\n    ) AS [r] GROUP BY r.TransactionDate, r.ProductId;\n\nSELECT\n    COUNT_BIG(*)\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2019/*/*/*/*',\n        FORMAT='PARQUET'\n    ) AS [r];\n\nSELECT\n    COUNT_BIG(*)\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/sale-small/Year=2018/*/*/*/*',\n        FORMAT='PARQUET'\n    ) AS [r];",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "master",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}

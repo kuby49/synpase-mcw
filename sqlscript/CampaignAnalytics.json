@@ -2,7 +2,7 @@
 	"name": "CampaignAnalytics",
 	"properties": {
 		"content": {
-			"query": "CREATE TABLE [wwi_mcw].[CampaignAnalytics]\n(\n    [Region] [nvarchar](50)  NULL,\n    [Country] [nvarchar](30)  NOT NULL,\n    [ProductCategory] [nvarchar](50)  NOT NULL,\n    [CampaignName] [nvarchar](500)  NOT NULL,\n    [Analyst] [nvarchar](25) NULL,\n    [Revenue] [decimal](10,2)  NULL,\n    [RevenueTarget] [decimal](10,2)  NULL,\n    [City] [nvarchar](50)  NULL,\n    [State] [nvarchar](25)  NULL\n)\nWITH\n(\n    DISTRIBUTION = HASH ( [Region] ),\n    CLUSTERED COLUMNSTORE INDEX\n);  ",
+			"query": "CREATE TABLE [wwi_mcw].[CampaignAnalytics]\n(\n    [Region] [nvarchar](50)  NULL,\n    [Country] [nvarchar](30)  NOT NULL,\n    [ProductCategory] [nvarchar](50)  NOT NULL,\n    [CampaignName] [nvarchar](500)  NOT NULL,\n    [Analyst] [nvarchar](25) NULL,\n    [Revenue] [decimal](10,2)  NULL,\n    [RevenueTarget] [decimal](10,2)  NULL,\n    [City] [nvarchar](50)  NULL,\n    [State] [nvarchar](25)  NULL\n)\nWITH\n(\n    DISTRIBUTION = HASH ( [Region] ),\n    CLUSTERED COLUMNSTORE INDEX\n);\n\n\nSELECT COUNT(*) FROM [wwi_mcw].[CampaignAnalytics]\n\nSELECT COUNT(*) FROM [wwi_mcw].[Product]",
 			"metadata": {
 				"language": "sql"
 			},
