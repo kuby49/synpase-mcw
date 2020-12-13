@@ -1038,7 +1038,7 @@
 					},
 					"currentConnection": {
 						"name": "SQLPool01",
-						"type": "SqlPool"
+						"type": "SqlCompute"
 					}
 				},
 				"type": "SqlQuery"
@@ -1057,7 +1057,7 @@
 					},
 					"currentConnection": {
 						"name": "SQLPool01",
-						"type": "SqlPool"
+						"type": "SqlCompute"
 					}
 				},
 				"type": "SqlQuery"
