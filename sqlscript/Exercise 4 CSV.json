@@ -1,0 +1,16 @@
+{
+	"name": "Exercise 4 CSV",
+	"properties": {
+		"content": {
+			"query": "SELECT\n   csv.*\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/data-generators/generator-product/generator-product.csv',\n        FORMAT='CSV',\n        FIRSTROW = 1\n    ) WITH (\n        ProductID INT,\n        Seasonality INT,\n        Price DECIMAL(10,2),\n        Profit DECIMAL(10,2)\n    ) as csv\n\n\n    SELECT\n    Seasonality,\n    SUM(Price) as TotalSalesPrice,\n    SUM(Profit) as TotalProfit\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/data-generators/generator-product/generator-product.csv',\n        FORMAT='CSV',\n        FIRSTROW = 1\n    ) WITH (\n        ProductID INT,\n        Seasonality INT,\n        Price DECIMAL(10,2),\n        Profit DECIMAL(10,2)\n    ) as csv\nGROUP BY\n    csv.Seasonality",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"name": "master",
+				"type": "SqlOnDemand"
+			}
+		},
+		"type": "SqlQuery"
+	}
+}
