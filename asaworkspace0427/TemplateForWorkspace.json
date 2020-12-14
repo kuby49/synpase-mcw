@@ -2265,6 +2265,10 @@
 				},
 				"metadata": {
 					"saveOutput": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
 					"language_info": {
 						"name": "python"
 					},
@@ -2301,7 +2305,7 @@
 							"display(df.limit(10))"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -2321,7 +2325,7 @@
 							"df.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 5
 					},
 					{
 						"cell_type": "code",
@@ -2352,7 +2356,7 @@
 							"profitByDateProduct.show(100)"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": null
 					}
 				]
 			},
