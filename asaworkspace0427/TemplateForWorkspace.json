@@ -1476,6 +1476,44 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Exercise 4 CSV')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT\n   csv.*\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/data-generators/generator-product/generator-product.csv',\n        FORMAT='CSV',\n        FIRSTROW = 1\n    ) WITH (\n        ProductID INT,\n        Seasonality INT,\n        Price DECIMAL(10,2),\n        Profit DECIMAL(10,2)\n    ) as csv\n\n\n    SELECT\n    Seasonality,\n    SUM(Price) as TotalSalesPrice,\n    SUM(Profit) as TotalProfit\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/data-generators/generator-product/generator-product.csv',\n        FORMAT='CSV',\n        FIRSTROW = 1\n    ) WITH (\n        ProductID INT,\n        Seasonality INT,\n        Price DECIMAL(10,2),\n        Profit DECIMAL(10,2)\n    ) as csv\nGROUP BY\n    csv.Seasonality",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "master",
+						"type": "SqlOnDemand"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Exercise 4 Json')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT\n    products.*\nFROM\n    OPENROWSET(\n        BULK 'https://asadatalake0427.dfs.core.windows.net/wwi-02/product-json/json-data/*.json',\n        FORMAT='CSV',\n        FIELDTERMINATOR ='0x0b',\n        FIELDQUOTE = '0x0b',\n        ROWTERMINATOR = '0x0b'\n    )\n    WITH (\n        jsonContent NVARCHAR(200)\n    ) AS [raw]\nCROSS APPLY OPENJSON(jsonContent)\nWITH (\n    ProductId INT,\n    Seasonality INT,\n    Price DECIMAL(10,2),\n    Profit DECIMAL(10,2)\n) AS products\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "master",
+						"type": "SqlOnDemand"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -2284,11 +2322,8 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 3,
 						"cores": 4,
-						"memory": 28,
-						"extraHeader": {},
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
+						"memory": 28
+					}
 				},
 				"cells": [
 					{
@@ -2305,7 +2340,7 @@
 							"display(df.limit(10))"
 						],
 						"outputs": [],
-						"execution_count": 4
+						"execution_count": 7
 					},
 					{
 						"cell_type": "code",
@@ -2325,7 +2360,7 @@
 							"df.printSchema()"
 						],
 						"outputs": [],
-						"execution_count": 5
+						"execution_count": 8
 					},
 					{
 						"cell_type": "code",
@@ -2356,7 +2391,7 @@
 							"profitByDateProduct.show(100)"
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 9
 					}
 				]
 			},
