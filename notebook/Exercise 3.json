@@ -59,7 +59,7 @@
 					"df = spark.read.load('abfss://wwi-02@asadatalake0427.dfs.core.windows.net/sale-small/Year=2010/Quarter=Q4/Month=12/Day=20101231/sale-small-20101231-snappy.parquet', format='parquet')\r\n",
 					"display(df.limit(10))"
 				],
-				"execution_count": 1
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -78,7 +78,7 @@
 				"source": [
 					"df.printSchema()"
 				],
-				"execution_count": 2
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -108,7 +108,7 @@
 					")\r\n",
 					"profitByDateProduct.show(100)"
 				],
-				"execution_count": 3
+				"execution_count": null
 			}
 		]
 	}
