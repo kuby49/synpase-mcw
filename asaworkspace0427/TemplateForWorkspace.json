@@ -1514,6 +1514,25 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Exercise_7_Column_Level_Security')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "    /*  Column-level security feature in Azure Synapse simplifies the design and coding of security in applications.\n    It ensures column level security by restricting column access to protect sensitive data. */\n\n/* Scenario: In this scenario we will be working with two users. The first one is the CEO, he has access to all\n    data. The second one is DataAnalystMiami, this user doesn't have access to the confidential Revenue column\n    in the CampaignAnalytics table. Follow this lab, one step at a time to see how Column-level security removes access to the\n    Revenue column to DataAnalystMiami */\n\n--Step 1: Let us see how this feature in Azure Synapse works. Before that let us have a look at the Campaign Analytics table.\nselect  Top 100 * from wwi_mcw.CampaignAnalytics\nwhere City is not null and state is not null\n\n/*  Consider a scenario where there are two users.\n    A CEO, who is an authorized  personnel with access to all the information in the database\n    and a Data Analyst, to whom only required information should be presented.*/\n\n-- Step:2 Verify the existence of the “CEO” and “DataAnalystMiami” users in the Datawarehouse.\nSELECT Name as [User1] FROM sys.sysusers WHERE name = N'CEO';\nSELECT Name as [User2] FROM sys.sysusers WHERE name = N'DataAnalystMiami';\n\n\n-- Step:3 Now let us enforcing column level security for the DataAnalystMiami.\n/*  The CampaignAnalytics table in the warehouse has information like ProductID, Analyst, CampaignName, Quantity, Region, State, City, RevenueTarget and Revenue.\n    The Revenue generated from every campaign is classified and should be hidden from DataAnalystMiami.\n*/\n\nREVOKE SELECT ON wwi_mcw.CampaignAnalytics FROM DataAnalystMiami;\nGRANT SELECT ON wwi_mcw.CampaignAnalytics([Analyst], [CampaignName], [Region], [State], [City], [RevenueTarget]) TO DataAnalystMiami;\n-- This provides DataAnalystMiami access to all the columns of the Sale table but Revenue.\n\n-- Step:4 Then, to check if the security has been enforced, we execute the following query with current User As 'DataAnalystMiami', this will result in an error\n--  since DataAnalystMiami doesn't have select access to the Revenue column\nEXECUTE AS USER ='DataAnalystMiami';\nselect TOP 100 * from wwi_mcw.CampaignAnalytics;\n---\n-- The following query will succeed since we are not including the Revenue column in the query.\nEXECUTE AS USER ='DataAnalystMiami';\nselect [Analyst],[CampaignName], [Region], [State], [City], [RevenueTarget] from wwi_mcw.CampaignAnalytics;\n\n-- Step:5 Whereas, the CEO of the company should be authorized with all the information present in the warehouse.To do so, we execute the following query.\nRevert;\nGRANT SELECT ON wwi_mcw.CampaignAnalytics TO CEO;  --Full access to all columns.\n\n-- Step:6 Let us check if our CEO user can see all the information that is present. Assign Current User As 'CEO' and the execute the query\nEXECUTE AS USER ='CEO'\nselect * from wwi_mcw.CampaignAnalytics\nRevert;",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"name": "SQLPool01",
+						"type": "SqlPool"
+					}
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
